@@ -27,48 +27,89 @@ public class GraphStateMachine extends StateMachine
     class Pair<A,B>{
         A a;
         B b;
+        
+        @Override
+        public String toString()
+        {
+        	return "("+ a + "," + b + ")";
+        }
+        
+        @Override
+        public boolean equals(Object arg0) {
+        	if (arg0 instanceof Pair)
+        	{
+        		@SuppressWarnings("rawtypes")
+				Pair other = (Pair) arg0;
+        		return a.equals(other.a) && b.equals(other.b);
+        	}
+        	else
+        	{
+        		return false;
+        	}
+        }
+        
+        @Override
+        public int hashCode() {        	
+        	return a.hashCode() + b.hashCode();
+        }
     }
     
     private Map<Integer,Vertex> vertices = new HashMap<>();
     private Map<Pair<Integer,Integer>,Edge> edges = new HashMap<>();
 
-    public Object AddEdge(Commit<AddEdgeCommand> commit){
+    public Boolean AddEdge(Commit<AddEdgeCommand> commit){
         try{
             Pair<Integer,Integer> p = new Pair<>();
             p.a = commit.operation().id;
             p.b = commit.operation().id2;
 
             Edge e = new Edge(commit.operation().id, commit.operation().id2, commit.operation().desc);
+            
+            System.out.println("Adding " + e);
+            
             return edges.putIfAbsent(p, e) == null;
         }finally{
             commit.close();
         }
     }
     
-    public Object AddVertex(Commit<AddVertexCommand> commit){
+    public Boolean AddVertex(Commit<AddVertexCommand> commit){
         try{
             Vertex v = new Vertex(commit.operation().id, commit.operation().desc);
+            
+            System.out.println("Adding " + v);
+
             return vertices.putIfAbsent(commit.operation().id, v) == null;
         }finally{
             commit.close();
         }
     }
 
-    public Object GetEdge(Commit<GetEdgeQuery> commit){
-        try{
-            Pair<Integer,Integer> p = new Pair<>();
-            p.a = commit.operation().id;
-            p.b = commit.operation().id2;
+    public Edge GetEdge(Commit<GetEdgeQuery> commit){
+    	try{
+    		Pair<Integer,Integer> p = new Pair<>();
+    		p.a = commit.operation().id;
+    		p.b = commit.operation().id2;
 
-            return edges.get(p);
+    		System.out.println("Vertices:" + vertices);
+    		System.out.println("Edges:" + edges);
+
+    		Edge result = edges.get(p); 
+    		System.out.println("GetEdge " + p + " = " + result);
+            return result;
         }finally{
             commit.close();
         }
     }
     
-    public Object GetVertex(Commit<GetVertexQuery> commit){
-        try{
-            return vertices.get(commit.operation().id);
+    public Vertex GetVertex(Commit<GetVertexQuery> commit){
+    	try{
+    		System.out.println("Vertices:" + vertices);
+    		System.out.println("Edges:" + edges);
+
+    		Vertex result = vertices.get(commit.operation().id);
+    		System.out.println("GetVertex " + commit.operation().id + " = " + result);
+    		return result;
         }finally{
             commit.close();
         }
@@ -96,11 +137,6 @@ public class GraphStateMachine extends StateMachine
                                                                    .withStorageLevel(StorageLevel.DISK)
                                                                    .build());
         CopycatServer server = builder.build();
-        server.serializer().register(AddVertexCommand.class);
-        server.serializer().register(AddEdgeCommand.class);
-        server.serializer().register(GetVertexQuery.class);
-        server.serializer().register(GetEdgeQuery.class);
-
 
         if(myId == 0)
         {

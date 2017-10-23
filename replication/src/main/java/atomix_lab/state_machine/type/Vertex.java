@@ -1,6 +1,8 @@
 package atomix_lab.state_machine.type;
 
-public class Vertex {
+import java.io.Serializable;
+
+public class Vertex implements Serializable {
     int id;
     String desc;
 
@@ -8,4 +10,11 @@ public class Vertex {
         this.id = id;
         this.desc = desc;
     }
+    
+    @Override
+    public String toString()
+    {
+    	return "(" + id + "," + desc + ")";
+    }
+
 }
