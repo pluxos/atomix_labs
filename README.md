@@ -22,4 +22,4 @@ mvn exec:java -Dexec.mainClass="atomix_lab.state_machine.server.GraphStateMachin
 
 ### Clients
 #servidor 0
-mvn exec:java -Dexec.mainClass="atomix_lab.state_machine.client.Client" -Dexec.args="127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002"
+mvn exec:java -Dexec.mainClass="atomix_lab.state_machine.client.GraphClient" -Dexec.args="127.0.0.1 5000 127.0.0.1 5001 127.0.0.1 5002"
