@@ -1,0 +1,7 @@
+/Users/lasaro/Documents/workspace/replication/src/main/java/atomix_lab/state_machine/GraphStateMachine.java
+/Users/lasaro/Documents/workspace/replication/src/main/java/atomix_lab/state_machine/type/Edge.java
+/Users/lasaro/Documents/workspace/replication/src/main/java/atomix_lab/state_machine/GetVertexQuery.java
+/Users/lasaro/Documents/workspace/replication/src/main/java/atomix_lab/state_machine/AddEdgeCommand.java
+/Users/lasaro/Documents/workspace/replication/src/main/java/atomix_lab/state_machine/GetEdgeQuery.java
+/Users/lasaro/Documents/workspace/replication/src/main/java/atomix_lab/state_machine/AddVertexCommand.java
+/Users/lasaro/Documents/workspace/replication/src/main/java/atomix_lab/state_machine/type/Vertex.java
