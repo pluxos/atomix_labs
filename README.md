@@ -7,9 +7,13 @@ Exercicio usando copycat versao 1.1.4. Em breve espero atualiza-lo para atomix-r
 # Como usar
 ## Build
 git clone https://github.com/pluxos/atomix_labs
+
 cd atomix_labs
+
 cd replication
+
 mvn compile
+
 mvn test
 
 ## Run
