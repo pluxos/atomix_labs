@@ -28,6 +28,12 @@ public class GraphStateMachine extends StateMachine
         A a;
         B b;
         
+        public Pair(A na, B nb)
+        {
+                a = na;
+                b = nb;
+        }
+
         @Override
         public String toString()
         {
@@ -59,11 +65,9 @@ public class GraphStateMachine extends StateMachine
 
     public Boolean AddEdge(Commit<AddEdgeCommand> commit){
         try{
-            Pair<Integer,Integer> p = new Pair<>();
-            p.a = commit.operation().id;
-            p.b = commit.operation().id2;
-
-            Edge e = new Edge(commit.operation().id, commit.operation().id2, commit.operation().desc);
+            AddEdgeCommand aec = commit.operation(); 
+            Pair<Integer,Integer> p = new Pair<>(aec.id, aec.id2);
+            Edge e = new Edge(aec.id, aec.id2, aec.desc);
             
             System.out.println("Adding " + e);
             
@@ -75,11 +79,12 @@ public class GraphStateMachine extends StateMachine
     
     public Boolean AddVertex(Commit<AddVertexCommand> commit){
         try{
-            Vertex v = new Vertex(commit.operation().id, commit.operation().desc);
+            AddVertexCommand avc = commit.operation();
+            Vertex v = new Vertex(avc.id, avc.desc);
             
             System.out.println("Adding " + v);
 
-            return vertices.putIfAbsent(commit.operation().id, v) == null;
+            return vertices.putIfAbsent(avc.id, v) == null;
         }finally{
             commit.close();
         }
@@ -87,9 +92,8 @@ public class GraphStateMachine extends StateMachine
 
     public Edge GetEdge(Commit<GetEdgeQuery> commit){
     	try{
-    		Pair<Integer,Integer> p = new Pair<>();
-    		p.a = commit.operation().id;
-    		p.b = commit.operation().id2;
+                GetEdgeQuery geq = commit.operation();
+    		Pair<Integer,Integer> p = new Pair<>(geq.id, geq.id2);
 
     		System.out.println("Vertices:" + vertices);
     		System.out.println("Edges:" + edges);
@@ -104,11 +108,12 @@ public class GraphStateMachine extends StateMachine
     
     public Vertex GetVertex(Commit<GetVertexQuery> commit){
     	try{
+                GetVertexQuery gvq = commit.operation();
     		System.out.println("Vertices:" + vertices);
     		System.out.println("Edges:" + edges);
 
-    		Vertex result = vertices.get(commit.operation().id);
-    		System.out.println("GetVertex " + commit.operation().id + " = " + result);
+    		Vertex result = vertices.get(gvq.id);
+    		System.out.println("GetVertex " + gvq.id + " = " + result);
     		return result;
         }finally{
             commit.close();

@@ -37,10 +37,16 @@ public class GraphClient extends StateMachine
         CompletableFuture<CopycatClient> future = client.connect(addresses);
         future.join();
 
-        CompletableFuture[] futures = new CompletableFuture[3];
-        futures[0] = client.submit(new AddVertexCommand(1,1, "Hello world!"));
-        futures[1] = client.submit(new AddVertexCommand(2,2, "world! Hello"));
-        futures[2] = client.submit(new AddEdgeCommand(1,2, "Edge"));
+        CompletableFuture[] futures = new CompletableFuture[]{
+           client.submit(new AddVertexCommand(1,1, "vertice1")),
+           client.submit(new AddVertexCommand(2,1, "vertice2")),
+           client.submit(new AddVertexCommand(3,1, "vertice3")),
+           client.submit(new AddVertexCommand(4,2, "vertice4")),
+           client.submit(new AddEdgeCommand(1,2, "Edge from 1 to 2")),
+           client.submit(new AddEdgeCommand(1,3, "Edge")),
+           client.submit(new AddEdgeCommand(1,4, "Edge")),
+           client.submit(new AddEdgeCommand(4,3, "Edge"))
+        };
 
         CompletableFuture.allOf(futures).thenRun(() -> System.out.println("Commands completed!"));
         
